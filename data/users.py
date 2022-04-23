@@ -1,5 +1,5 @@
 import sqlalchemy
-from db_session import SqlAlchemyBase
+from .db_session import SqlAlchemyBase
 from sqlalchemy import orm
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,11 +9,10 @@ class User(SqlAlchemyBase, UserMixin):
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    username = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    classnum = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    username = sqlalchemy.Column(sqlalchemy.String, nullable=True, unique=True)
-    classname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    about = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'

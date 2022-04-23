@@ -14,8 +14,4 @@ class GoodsForm(FlaskForm):
     title = StringField('Заголовок', validators=[DataRequired()])
     price = IntegerField('Цена', validators=[DataRequired()])
     category = StringField("Категория")
-<<<<<<< HEAD
     submit = SubmitField('Применить')
-=======
-    submit = SubmitField('Применить')
->>>>>>> origin/master

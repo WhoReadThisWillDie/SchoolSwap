@@ -61,7 +61,7 @@ def add_category():          #тест добавления
 def index():
     db_sess = db_session.create_session()
     news = db_sess.query(Goods)
-    return render_template("index.html", news=news, title="Авито2.0")
+    return render_template("index.html", news=news, title="school_swap")
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():

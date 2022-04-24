@@ -4,3 +4,5 @@ TODO:
 3. Придумать интерфейс профился
 4. Прописать работу чатов
 5. Залить на хостинг
+
+<img src="https://github.com/WhoReadThisWillDie/SchoolSwap/blob/master/sad_gosling.gif" />

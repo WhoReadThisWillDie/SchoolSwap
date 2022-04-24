@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
-
 {% block items %}
-<div class="goods">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <h1>Товары</h1>
-  {% if current_user.is_authenticated %}
-  <a href="news" class="btn btn-secondary">Добавить Товар</a>
-  {% endif %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<h1 style="text-align: center;">Мои Товары</h1>
+<div class="col-md6" style="
+text-align: center;
+padding-top: 10px;
+">
+  <a href="/" class="btn btn-success">Настройки</a>
+  <a href="/my_goods" class="btn btn-success">Мои Товары</a>
+  <a href="/" class="btn btn-success">Помощь</a>
 </div>
 <div class="items">
   {% for item in goods%}
@@ -15,7 +17,7 @@
     <img src="{{ url_for('static', filename=item.picture) }}" class="image">
     <h2>{{item.title}}</h2>
     <div>
-      Автор - {{item.user.name}}
+      {{item.description}}
     </div>
     <div>
       Цена - {{item.price}}
@@ -30,14 +32,12 @@
       <a href="/goods_info/{{ item.id }}" class="btn btn-success">
         Подробнее
       </a>
-      {% if current_user.is_authenticated and current_user == item.user %}
       <a href="/goods/{{ item.id }}" class="btn btn-warning">
         Изменить
       </a>
       <a href="/goods_delete/{{ item.id }}" class="btn btn-danger">
         Удалить
       </a>
-      {% endif %}
     </div>
   </div>
   {% endfor %}

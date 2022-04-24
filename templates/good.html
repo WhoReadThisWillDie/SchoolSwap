@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/good.css') }}">
+<div class="col-md-auto border rounded item">
+  <h1>{{goods.title}}</h1>
+  <div class="buy">
+    <img src="{{ url_for('static', filename=news.picture) }}" class="image">
+    <div class="buy">
+      <a href="/" class="btn btn-primary items_buy"><h1>Купить</h1></a>
+      <a href="/" class="btn btn-primary items_buy"><h1>Узнать номер</h1></a>
+    </div>
+  </div>
+  <div>
+    <h2>
+      Описание
+    </h2>
+    <p>{{goods.description}}</p>
+  </div>
+  <div>
+    <h2>Автор</h2>
+    <p>{{goods.user.name}}</p>
+  </div>
+  <div>
+    <h2>Цена</h2>
+    <p>{{goods.price}}₽</p>
+  </div>
+  <div>
+    <h2>Категория</h2>
+    <p>{{goods.category}}</p>
+  </div>
+  <div>
+    <h2>Дата добавления</h2>
+    <p>{{goods.created_date}}</p>
+  </div>
+
+  <div>
+    {% if current_user.is_authenticated and current_user == goods.user %}
+    <a href="/goods/{{ goods.id }}" class="btn btn-warning">
+      Изменить
+    </a>
+    <a href="/goods_delete/{{ goods.id }}" class="btn btn-danger">
+      Удалить
+    </a>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

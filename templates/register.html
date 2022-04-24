@@ -23,6 +23,15 @@
         {% endfor %}
     </p>
     <p>
+        {{ form.phone.label }}<br>
+        {{ form.phone(class="form-control", placeholder="Номер телефона") }}<br>
+        {% for error in form.phone.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
         {{ form.email.label }}<br>
         {{ form.email(class="form-control", type="email", placeholder="Почта") }}<br>
         {% for error in form.email.errors %}

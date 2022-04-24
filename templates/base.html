@@ -14,14 +14,15 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a href="/"><img style="margin-right: 5px" width="50px" height="50px" src="static/img/logo_2.png"></a>
-            <a class="navbar-brand" href="#">SchoolSwap</a>
+            <a class="navbar-brand" href="/">SchoolSwap</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" href="#">Профиль</a>
-                    <a class="nav-link" href="#">Объявления</a>
+                    <a class="nav-link" href="/office">Профиль</a>
+                    <a class="nav-link" href="/goods">Объявления</a>
+                    <a class="nav-link" href="/about">Подробнее</a>
                 </div>
             </div>
             {% if current_user.is_authenticated %}

@@ -5,6 +5,7 @@ from wtforms import BooleanField, SubmitField, IntegerField
 from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm
 
+
 class GoodsForm(FlaskForm):
     file = FileField('Вставте фото', validators=[
         FileRequired(),

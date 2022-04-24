@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/good.css') }}">
-<div class="col-md-auto border rounded item">
+<div class="col-md-auto border rounded item" style="
+padding-top: 10px;
+padding-bottom: 10px">
   <h1>{{goods.title}}</h1>
   <div class="buy">
-    <img src="{{ url_for('static', filename=news.picture) }}" class="image">
+    <img src="{{ url_for('static', filename=goods.picture) }}" class="image">
     <div class="buy">
-      <a href="/" class="btn btn-primary items_buy"><h1>Купить</h1></a>
+      <a href="/chat" class="btn btn-success items_buy"><h1>Написать продавцу</h1></a>
       <a href="/" class="btn btn-primary items_buy"><h1>Узнать номер</h1></a>
     </div>
   </div>
@@ -20,15 +21,11 @@
   </div>
   <div>
     <h2>Автор</h2>
-    <p>{{goods.user.name}}</p>
+    <p>{{goods.user.username}}</p>
   </div>
   <div>
     <h2>Цена</h2>
     <p>{{goods.price}}₽</p>
-  </div>
-  <div>
-    <h2>Категория</h2>
-    <p>{{goods.category}}</p>
   </div>
   <div>
     <h2>Дата добавления</h2>

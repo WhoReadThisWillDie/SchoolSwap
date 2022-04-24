@@ -112,7 +112,7 @@ def add_goods():
         goods.title = form.title.data
         goods.description = form.description.data
         goods.price = form.price.data
-        goods.picture = f"static/img/{filename}"
+        goods.picture = f"img/{filename}"
         current_user.goods.append(goods)
         db_sess.merge(current_user)
         db_sess.commit()
@@ -160,7 +160,7 @@ def goods_delete(id):
         db_sess.commit()
     else:
         abort(404)
-    return redirect('/')
+    return redirect('/my_goods')
 
 
 @app.route('/goods_info/<int:id>', methods=['GET', 'POST'])

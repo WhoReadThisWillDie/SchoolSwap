@@ -5,9 +5,8 @@ from flask import Flask, render_template, redirect, make_response, request, sess
 from data import db_session
 from data.users import User
 from data.goods import Goods
-from data.category import Category
 from forms.goods import GoodsForm
-from forms.user import RegisterForm, LoginForm
+from forms.users import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 
@@ -41,7 +40,9 @@ def load_user(user_id):
 def index():
     db_sess = db_session.create_session()
     goods = db_sess.query(Goods)
-    return render_template("index.html")
+    if current_user.is_authenticated:
+        return render_template("index.html", goods=goods)
+    return render_template("hello.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -79,7 +80,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect('/')
+            return redirect('/office')
         return render_template("login.html", form=form, title='Авторизация', message="Неправильный логин или пароль")
     return render_template('login.html', form=form, title='Авторизация')
 
@@ -111,10 +112,8 @@ def add_goods():
         goods.title = form.title.data
         goods.description = form.description.data
         goods.price = form.price.data
-        goods.picture = f"images/{filename}"
-        goods.category = form.category.data
-        name = db_sess.query(Category).filter(Category.name == form.category.data).first()
-        # current_user.goods.append(goods)
+        goods.picture = f"static/img/{filename}"
+        current_user.goods.append(goods)
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')

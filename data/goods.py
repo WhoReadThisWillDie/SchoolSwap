@@ -14,17 +14,12 @@ class Goods(SqlAlchemyBase, SerializerMixin):
     picture = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    created_date = sqlalchemy.Column(sqlalchemy.DateTime,
+                                     default=datetime.datetime.now)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     price = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-
-    created_date = sqlalchemy.Column(sqlalchemy.DateTime,
-                                     default=datetime.datetime.now)
-
-    categories = orm.relation("Category",
-                              secondary="association",
-                              backref="Goods")
     user = orm.relation('User')
 
     def __repr__(self):
-        return f"Goods - {self.id}, {self.picture}, {self.description}, {self.title}, {self.user_id}, {self.price}, {self.categories}"
+        return f"Goods - {self.id}, {self.picture}, {self.description}, {self.title}, {self.user_id}, {self.price}"

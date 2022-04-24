@@ -14,5 +14,4 @@ class GoodsForm(FlaskForm):
     description = TextAreaField("Содержание")
     title = StringField('Заголовок', validators=[DataRequired()])
     price = IntegerField('Цена', validators=[DataRequired()])
-    category = StringField("Категория")
     submit = SubmitField('Применить')

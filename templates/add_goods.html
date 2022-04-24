@@ -33,22 +33,12 @@
         {% endfor %}
     </p>
     <p>
-        {{ form.category.label }}<br>
-        {{ form.category(class="form-control", type="category") }}<br>
-        {% for error in form.category.errors %}
-            <p content="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
         {{ form.file.label(class="form-label") }}<br>
         {{ form.file(class="form-control-control") }}<br>
     </p>
     <p>
         {{ form.submit(type="submit", class="btn btn-primary") }}
     </p>
-
     {{message}}
 </form>
 <script type="static/scripts/script.js"></script>

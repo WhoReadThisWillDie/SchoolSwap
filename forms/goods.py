@@ -7,7 +7,7 @@ from flask_wtf import FlaskForm
 
 
 class GoodsForm(FlaskForm):
-    file = FileField('Вставте фото', validators=[
+    file = FileField('Вставьте фото', validators=[
         FileRequired(),
         FileAllowed(['jpg', 'png'], 'Images only!')
     ])

@@ -9,11 +9,13 @@ from forms.goods import GoodsForm
 from forms.users import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
+from flask_socketio import SocketIO, send
 
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+UPLOAD_PATH = 'static/images/'
 
 
 def get_map_picture():
@@ -48,8 +50,8 @@ def index():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     message = ''
-    db_sess = db_session.create_session()
     form = RegisterForm()
+    db_sess = db_session.create_session()
     if form.validate_on_submit():
         if form.password.data != form.confirm_password.data:
             return render_template("register.html", title='Регистрация', form=form, message='Пароли не совпадают')
@@ -68,7 +70,7 @@ def register():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        return redirect('/my_profile')
     return render_template("register.html", title='Регистрация', form=form, message=message)
 
 
@@ -80,15 +82,69 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect('/office')
+            return redirect('/my_profile')
         return render_template("login.html", form=form, title='Авторизация', message="Неправильный логин или пароль")
     return render_template('login.html', form=form, title='Авторизация')
 
 
-@app.route('/office')
+@app.route('/my_profile')
 @login_required
-def office():
-    return render_template("office.html", title="Профиль")
+def profile():
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).filter(User.id == current_user.id).first()
+    return render_template("my_profile.html", title="Профиль", users=users)
+
+
+# @app.route('/users/<int:id>', methods=['GET', 'POST'])
+# @login_required
+# def edit_profile(id):
+#     form = RegisterForm()
+#     if request.method == "GET":
+#         db_sess = db_session.create_session()
+#         users = db_sess.query(User).filter(User.id == id).first()
+#         if users:
+#             form.username.data = users.username
+#             form.classnum.data = users.classnum
+#             form.phone.data = users.phone
+#             form.email.data = users.email
+#         else:
+#             abort(404)
+#     if form.validate_on_submit():
+#         db_sess = db_session.create_session()
+#         users = db_sess.query(User).filter(User.id == id).first()
+#         if users:
+#             form.username.data = users.username
+#             form.classnum.data = users.classnum
+#             form.phone.data = users.phone
+#             form.email.data = users.email
+#             db_sess.commit()
+#             return redirect('/my_profile')
+#         else:
+#             abort(404)
+#     return render_template('edit_profile.html',
+#                            title='Редактирование профиля',
+#                            form=form)
+#
+#
+@app.route('/users_delete/<int:id>', methods=['GET', 'POST'])
+def delete_profile(id):
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).filter(User.id == id).first()
+    if users:
+        db_sess.delete(users)
+        db_sess.commit()
+        redirect('/logout')
+    else:
+        abort(404)
+    return redirect('/')
+
+
+@app.route('/profile/<int:id>')
+@login_required
+def seller_profile(id):
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).filter(User.id == id).first()
+    return render_template('profile.html', title='Профиль продавцв', users=users)
 
 
 @app.route('/my_goods', methods=['GET', 'POST'])
@@ -101,7 +157,17 @@ def my_goods():
     return redirect("/")
 
 
-@app.route('/goods', methods=['GET', 'POST'])
+@app.route('/all_goods', methods=['GET', 'POST'])
+@login_required
+def all_goods():
+    db_sess = db_session.create_session()
+    goods = db_sess.query(Goods)
+    if goods:
+        return render_template("all_goods.html", goods=goods, title="Все объявления")
+    return redirect("/my_profile")
+
+
+@app.route('/add_goods', methods=['GET', 'POST'])
 @login_required
 def add_goods():
     form = GoodsForm()
@@ -116,7 +182,7 @@ def add_goods():
         current_user.goods.append(goods)
         db_sess.merge(current_user)
         db_sess.commit()
-        return redirect('/')
+        return redirect('/my_goods')
     return render_template('add_goods.html', title='Добавление товара',
                            form=form)
 
@@ -138,14 +204,16 @@ def edit_goods(id):
         db_sess = db_session.create_session()
         goods = db_sess.query(Goods).filter(Goods.id == id, Goods.user == current_user).first()
         if goods:
+            filename = secure_filename(form.file.data.filename)
             goods.title = form.title.data
             goods.description = form.description.data
             goods.price = form.price.data
+            goods.picture = f"img/{filename}"
             db_sess.commit()
-            return redirect('/')
+            return redirect('/my_goods')
         else:
             abort(404)
-    return render_template('add_goods.html',
+    return render_template('edit_goods.html',
                            title='Редактирование товара',
                            form=form)
 
@@ -166,10 +234,17 @@ def goods_delete(id):
 @app.route('/goods_info/<int:id>', methods=['GET', 'POST'])
 def goods_info(id):
     db_sess = db_session.create_session()
-    news = db_sess.query(Goods).filter(Goods.id == id).first()
+    goods = db_sess.query(Goods).filter(Goods.id == id).first()
     return render_template('good.html',
-                           goods=news,
+                           goods=goods,
                            title='Товар')
+
+
+@app.route('/profile/<int:id>', methods=['GET', 'POST'])
+def profile_info(id):
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).filter(User.id == id).first()
+    return render_template('profile.html', users=users, title='Профиль продавца')
 
 
 @app.route('/logout')

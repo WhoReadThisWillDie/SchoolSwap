@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/good.css') }}">
+<div class="col-md-12 border rounded item">
+  <h1>{{users.username}}</h1>
+  <div>
+    <h3>Класс</h3>
+    <p>{{users.classnum}}</p>
+  </div>
+  <div>
+    <h3>Номер</h3>
+    <p>{{users.phone}}</p>
+  </div>
+  <div>
+    <h3>Почта</h3>
+    <p>{{users.email}}</p>
+  </div>
+</div>
+{% endblock %}

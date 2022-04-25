@@ -2,7 +2,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<h1 style="text-align: center;">Мои Товары</h1>
+<h1 style="text-align: center;">Все Товары</h1>
 <div class="items">
   {% for item in goods%}
   <div class="col-md-4 border rounded item">
@@ -17,12 +17,6 @@
     <div>
       <a href="/goods_info/{{ item.id }}" class="btn btn-primary">
         Подробнее
-      </a>
-      <a href="/goods/{{ item.id }}" class="btn btn-warning">
-        Изменить
-      </a>
-      <a href="/goods_delete/{{ item.id }}" class="btn btn-danger">
-        Удалить
       </a>
     </div>
   </div>

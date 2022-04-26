@@ -1,9 +1,1 @@
-<img src="https://github.com/WhoReadThisWillDie/SchoolSwap/blob/master/sad_gosling.gif" />
-
-TODO:
-1. Поменять интерфейс объявлений(разделить все и собственные, а так же изменить navbar) ✅
-2. Сделать всплывающее окошко для номера телефона(либо просто вписать в общую информацию) ✅
-3. Придумать интерфейс профиля ✅
-4. Исправить удаление пользователей
-5. Прописать работу чатов (или придумать альтернативу)
-6. Залить на хостинг
+<img src="https://github.com/WhoReadThisWillDie/SchoolSwap/blob/master/maestro.gif" />

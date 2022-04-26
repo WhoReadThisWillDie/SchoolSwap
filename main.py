@@ -6,7 +6,7 @@ from data import db_session
 from data.users import User
 from data.goods import Goods
 from forms.goods import GoodsForm
-from forms.users import RegisterForm, LoginForm
+from forms.users import RegisterForm, LoginForm, EditForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 from flask_socketio import SocketIO, send
@@ -95,37 +95,37 @@ def profile():
     return render_template("my_profile.html", title="Профиль", users=users)
 
 
-# @app.route('/users/<int:id>', methods=['GET', 'POST'])
-# @login_required
-# def edit_profile(id):
-#     form = RegisterForm()
-#     if request.method == "GET":
-#         db_sess = db_session.create_session()
-#         users = db_sess.query(User).filter(User.id == id).first()
-#         if users:
-#             form.username.data = users.username
-#             form.classnum.data = users.classnum
-#             form.phone.data = users.phone
-#             form.email.data = users.email
-#         else:
-#             abort(404)
-#     if form.validate_on_submit():
-#         db_sess = db_session.create_session()
-#         users = db_sess.query(User).filter(User.id == id).first()
-#         if users:
-#             form.username.data = users.username
-#             form.classnum.data = users.classnum
-#             form.phone.data = users.phone
-#             form.email.data = users.email
-#             db_sess.commit()
-#             return redirect('/my_profile')
-#         else:
-#             abort(404)
-#     return render_template('edit_profile.html',
-#                            title='Редактирование профиля',
-#                            form=form)
-#
-#
+@app.route('/users/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_profile(id):
+    form = EditForm()
+    if request.method == "GET":
+        db_sess = db_session.create_session()
+        users = db_sess.query(User).filter(User.id == id).first()
+        if users:
+            form.username.data = users.username
+            form.classnum.data = users.classnum
+            form.phone.data = users.phone
+            form.email.data = users.email
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        users = db_sess.query(User).filter(User.id == id).first()
+        if users:
+            users.username = form.username.data
+            users.classnum = form.classnum.data
+            users.phone = form.phone.data
+            users.email = form.email.data
+            db_sess.commit()
+            return redirect('/my_profile')
+        else:
+            abort(404)
+    return render_template('edit_profile.html',
+                           title='Редактирование профиля',
+                           form=form)
+
+
 @app.route('/users_delete/<int:id>', methods=['GET', 'POST'])
 def delete_profile(id):
     db_sess = db_session.create_session()
@@ -139,12 +139,12 @@ def delete_profile(id):
     return redirect('/')
 
 
-@app.route('/profile/<int:id>')
-@login_required
-def seller_profile(id):
-    db_sess = db_session.create_session()
-    users = db_sess.query(User).filter(User.id == id).first()
-    return render_template('profile.html', title='Профиль продавцв', users=users)
+# @app.route('/profile/<int:id>')
+# @login_required
+# def seller_profile(id):
+#     db_sess = db_session.create_session()
+#     users = db_sess.query(User).filter(User.id == id).first()
+#     return render_template('profile.html', title='Профиль продавцв', users=users)
 
 
 @app.route('/my_goods', methods=['GET', 'POST'])

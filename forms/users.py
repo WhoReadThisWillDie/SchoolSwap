@@ -10,7 +10,7 @@ class RegisterForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     confirm_password = PasswordField('Повторите пароль', validators=[DataRequired()])
-    submit = SubmitField('Применить')
+    submit = SubmitField('Регистрация')
 
 
 class LoginForm(FlaskForm):
@@ -18,3 +18,11 @@ class LoginForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
+
+
+class EditForm(FlaskForm):
+    username = StringField('Имя пользователя', validators=[DataRequired()])
+    classnum = StringField('Класс', validators=[DataRequired()])
+    phone = StringField('Номер телефона', validators=[DataRequired()])
+    email = EmailField('Почта', validators=[DataRequired()])
+    submit = SubmitField('Применить')
